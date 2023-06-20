@@ -1,10 +1,11 @@
 import { useState } from 'react';
 
-// a signup page with email password input and signup button
-
 export default function Login(): JSX.Element {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+
+  const isEmailValid = email.includes('@');
+  const isPasswordValid = password.length >= 8;
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -15,18 +16,7 @@ export default function Login(): JSX.Element {
   };
 
   const handleLogin = () => {
-    fetch('http://localhost:8080/login', {
-      method: 'POST',
-      body: JSON.stringify({ email, password }),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        if (res.success) {
-          alert('로그인 성공!');
-        } else {
-          alert('로그인 실패!');
-        }
-      });
+    console.log(email, password);
   };
 
   return (
@@ -50,15 +40,16 @@ export default function Login(): JSX.Element {
           className='w-full bg-transparent py-2 placeholder:font-light appearance-none border-b border-system-black focus:outline-none'
           id='password'
           placeholder='password'
-          type='text'
+          type='password'
           data-testid='password-input'
-          onChange={handleEmail}
+          onChange={handlePassword}
         />
       </div>
       <div className='mt-12'>
         <button
-          className='bg-system-black border-none font-light text-white w-full shadow-md py-3 rounded-full'
-          data-testid='signup-button'
+          className='bg-system-black disabled:opacity-50 border-none font-light text-white w-full shadow-md py-3 rounded-full'
+          data-testid='signin-button'
+          disabled={!isEmailValid || !isPasswordValid}
           onClick={handleLogin}>
           Log in
         </button>

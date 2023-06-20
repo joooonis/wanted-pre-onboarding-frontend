@@ -6,11 +6,11 @@ export default function Root(): JSX.Element {
     <>
       <div
         className={`${
-          location.pathname === '/login' ? 'bg-primary' : 'bg-secondary'
+          location.pathname === '/signin' ? 'bg-primary' : 'bg-secondary'
         } h-screen`}>
         <nav className='flex font-light bg-system-black p-4 items-center justify-between'>
           <h1 className='text-xl text-white'>Todo's</h1>
-          {location.pathname === '/login' && (
+          {location.pathname === '/signin' && (
             <Link
               className='appearance-none no-underline text-white'
               to={`/signup`}>
@@ -20,7 +20,7 @@ export default function Root(): JSX.Element {
           {location.pathname === '/signup' && (
             <Link
               className='appearance-none no-underline text-white'
-              to={`/login`}>
+              to={`/signin`}>
               Log in
             </Link>
           )}
