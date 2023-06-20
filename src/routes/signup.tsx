@@ -1,9 +1,12 @@
 import { useState, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup(): JSX.Element {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const isEmailValid = email.includes('@');
   const isPasswordValid = password.length >= 8;
@@ -16,11 +19,36 @@ export default function Signup(): JSX.Element {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitted(true);
 
-    console.log(email, password);
+    if (!isEmailValid || !isPasswordValid) {
+      setError('Invalid email or password.');
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        'https://www.pre-onboarding-selection-task.shop/auth/signup',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      if (response.ok) {
+        navigate('/signin');
+      } else {
+        const data = await response.json();
+        setError(data.message || 'Failed to register.');
+      }
+    } catch (error) {
+      setError('An error occurred. Please try again.');
+    }
   };
 
   return (
@@ -67,6 +95,9 @@ export default function Signup(): JSX.Element {
           disabled={!isEmailValid || !isPasswordValid}>
           Sign up
         </button>
+        {error && (
+          <p className='text-red-500 my-2 text-xs text-center'>{error}</p>
+        )}
       </div>
     </form>
   );
