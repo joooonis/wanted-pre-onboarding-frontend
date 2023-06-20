@@ -55,6 +55,47 @@ export default function Todo(): JSX.Element {
     }
   };
 
+  const handleTodoToggle = async (todoId: number) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Unauthorized');
+        return;
+      }
+
+      const updatedTodos = todos.map((todo) => {
+        if (todo.id === todoId) {
+          return {
+            ...todo,
+            isCompleted: !todo.isCompleted,
+          };
+        }
+        return todo;
+      });
+
+      setTodos(updatedTodos);
+
+      // Update the todo completion status on the server
+      await fetch(
+        `https://www.pre-onboarding-selection-task.shop/todos/${todoId}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            todo: updatedTodos.find((todo) => todo.id === todoId)?.todo,
+            isCompleted: updatedTodos.find((todo) => todo.id === todoId)
+              ?.isCompleted,
+          }),
+        }
+      );
+    } catch (error) {
+      setError('An error occurred. Please try again.');
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     // Check if token exists in local storage
@@ -115,6 +156,7 @@ export default function Todo(): JSX.Element {
               <input
                 type='checkbox'
                 defaultChecked={todo.isCompleted}
+                onChange={() => handleTodoToggle(todo.id)}
                 className='mr-2 mt-1 w-4 h-4 rounded-full'
               />
               <span>{todo.todo}</span>
