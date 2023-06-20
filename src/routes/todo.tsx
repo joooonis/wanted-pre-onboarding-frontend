@@ -1,5 +1,25 @@
-// a todo list page there is a todo list and a form to add a new todo item.
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 export default function Todo(): JSX.Element {
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    // Check if token exists in local storage
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/signin');
+    }
+  }, [isLoggedIn, navigate]);
+
   return (
     <div>
       <h1 className='font-light text-center text-xl mb-12'>Todo List</h1>
