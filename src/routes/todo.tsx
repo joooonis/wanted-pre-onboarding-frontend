@@ -2,8 +2,50 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function Todo(): JSX.Element {
+  const [todo, setTodo] = useState('');
+  const [error, setError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const handleTodoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTodo(e.target.value);
+  };
+
   const navigate = useNavigate();
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Unauthorized');
+        return;
+      }
+
+      const response = await fetch(
+        'https://www.pre-onboarding-selection-task.shop/todos',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ todo }),
+        }
+      );
+
+      if (response.status === 201) {
+        const data = await response.json();
+        // Handle the created todo data
+        console.log('Created Todo:', data);
+        setTodo('');
+      } else {
+        setError('Failed to add todo');
+      }
+    } catch (error) {
+      setError('An error occurred. Please try again.');
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     // Check if token exists in local storage
@@ -43,11 +85,13 @@ export default function Todo(): JSX.Element {
           </div>
         </li>
       </ul>
-      <form className='space-y-4 mt-12'>
+      <form className='space-y-4 mt-12' onSubmit={handleFormSubmit}>
         <h1 className='font-light text-center'>할일 추가하기</h1>
-
         <input
           data-testid='new-todo-input'
+          value={todo}
+          onChange={handleTodoChange}
+          placeholder='할 일을 입력하세요'
           className='w-full rounded-full px-4 py-3 placeholder:font-light appearance-none focus:outline-none'
           type='text'
         />
