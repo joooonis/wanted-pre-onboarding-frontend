@@ -5,7 +5,7 @@ import Root from './routes/root';
 import ErrorPage from './error-page';
 import './tailwind.css';
 import Signup from './routes/signup';
-import Login from './routes/login';
+import Signin from './routes/signin';
 
 const router = createBrowserRouter([
   {
@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'signin',
-        element: <Login />,
+        element: <Signin />,
       },
     ],
   },

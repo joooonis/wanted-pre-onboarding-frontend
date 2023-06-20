@@ -1,9 +1,10 @@
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function Login(): JSX.Element {
+export default function Signin(): JSX.Element {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -53,6 +54,27 @@ export default function Login(): JSX.Element {
       setError('An error occurred. Please try again.');
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    // Check if token exists in local storage
+    if (token) {
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/todo');
+    } else {
+      // Redirect to /signin if not logged in and trying to access /todo
+      if (window.location.pathname === '/todo') {
+        navigate('/signin');
+      }
+    }
+  }, [isLoggedIn, navigate]);
 
   return (
     <form onSubmit={handleSubmit}>
