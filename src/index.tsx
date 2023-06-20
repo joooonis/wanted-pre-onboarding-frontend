@@ -4,13 +4,19 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Root from './routes/root';
 import ErrorPage from './error-page';
 import './tailwind.css';
-import './mvp.css';
+import Signup from './routes/signup';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
     errorElement: <ErrorPage />,
+    children: [
+      {
+        path: 'signup',
+        element: <Signup />,
+      },
+    ],
   },
 ]);
 
