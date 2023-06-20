@@ -7,7 +7,7 @@ export default function Root(): JSX.Element {
       <div
         className={`${
           location.pathname === '/signin' ? 'bg-primary' : 'bg-secondary'
-        } h-screen`}>
+        } min-h-screen h-full`}>
         <nav className='flex font-light bg-system-black p-4 items-center justify-between'>
           <h1 className='text-xl text-white'>Todo's</h1>
           {location.pathname === '/signin' && (
