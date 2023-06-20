@@ -144,6 +144,56 @@ export default function Todo(): JSX.Element {
     fetchTodos();
   }, []);
 
+  const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
+  const [editedTodo, setEditedTodo] = useState('');
+  const handleEditTodo = (todoId: number, todo: string) => {
+    setEditingTodoId(todoId);
+    setEditedTodo(todo);
+  };
+
+  const handleSaveTodo = async (todoId: number) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Unauthorized');
+        return;
+      }
+
+      const updatedTodos = todos.map((todo) => {
+        if (todo.id === todoId) {
+          return {
+            ...todo,
+            todo: editedTodo,
+          };
+        }
+        return todo;
+      });
+
+      setTodos(updatedTodos);
+
+      await fetch(
+        `https://www.pre-onboarding-selection-task.shop/todos/${todoId}`,
+        {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            todo: editedTodo,
+            isCompleted: updatedTodos.find((todo) => todo.id === todoId)
+              ?.isCompleted,
+          }),
+        }
+      );
+
+      setEditingTodoId(null);
+      setEditedTodo('');
+    } catch (error) {
+      setError('An error occurred. Please try again.');
+    }
+  };
+
   return (
     <div>
       <h1 className='font-light text-center text-xl mb-12'>Todo List</h1>
@@ -159,19 +209,46 @@ export default function Todo(): JSX.Element {
                 onChange={() => handleTodoToggle(todo.id)}
                 className='mr-2 mt-1 w-4 h-4 rounded-full'
               />
-              <span>{todo.todo}</span>
+              {editingTodoId === todo.id ? (
+                <input
+                  type='text'
+                  value={editedTodo}
+                  onChange={(e) => setEditedTodo(e.target.value)}
+                />
+              ) : (
+                <span>{todo.todo}</span>
+              )}
             </label>
             <div className='space-x-2'>
-              <button
-                className='bg-system-black disabled:opacity-50 border-none font-light text-white text-sm shadow-md px-6 py-2 rounded-full'
-                data-testid='modify-button'>
-                수정
-              </button>
-              <button
-                className='bg-system-black disabled:opacity-50 border-none font-light text-white text-sm shadow-md px-6 py-2 rounded-full'
-                data-testid='delete-button'>
-                삭제
-              </button>
+              {editingTodoId === todo.id ? (
+                <button
+                  onClick={() => handleSaveTodo(todo.id)}
+                  className='bg-system-black disabled:opacity-50 border-none font-light text-white text-sm shadow-md px-2 py-2 rounded-full'
+                  data-testid='modify-button'>
+                  완료
+                </button>
+              ) : (
+                <button
+                  onClick={() => handleEditTodo(todo.id, todo.todo)}
+                  className='bg-system-black disabled:opacity-50 border-none font-light text-white text-sm shadow-md px-2 py-2 rounded-full'
+                  data-testid='modify-button'>
+                  수정
+                </button>
+              )}
+              {editingTodoId === todo.id ? (
+                <button
+                  onClick={() => setEditingTodoId(null)}
+                  className='bg-system-black disabled:opacity-50 border-none font-light text-white text-sm shadow-md px-2 py-2 rounded-full'
+                  data-testid='delete-button'>
+                  취소
+                </button>
+              ) : (
+                <button
+                  className='bg-system-black disabled:opacity-50 border-none font-light text-white text-sm shadow-md px-2 py-2 rounded-full'
+                  data-testid='delete-button'>
+                  삭제
+                </button>
+              )}
             </div>
           </li>
         ))}
