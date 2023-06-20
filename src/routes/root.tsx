@@ -4,9 +4,12 @@ export default function Root(): JSX.Element {
   const location = useLocation();
   return (
     <>
-      <div className='bg-primary h-screen'>
-        <nav className='flex bg-system-black p-4 items-center justify-between'>
-          <h1 className='font-bold text-xl  text-white'>Todo's</h1>
+      <div
+        className={`${
+          location.pathname === '/login' ? 'bg-primary' : 'bg-secondary'
+        } h-screen`}>
+        <nav className='flex font-light bg-system-black p-4 items-center justify-between'>
+          <h1 className='text-xl text-white'>Todo's</h1>
           {location.pathname === '/login' && (
             <Link
               className='appearance-none no-underline text-white'

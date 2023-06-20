@@ -5,6 +5,7 @@ import Root from './routes/root';
 import ErrorPage from './error-page';
 import './tailwind.css';
 import Signup from './routes/signup';
+import Login from './routes/login';
 
 const router = createBrowserRouter([
   {
@@ -15,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: 'signup',
         element: <Signup />,
+      },
+      {
+        path: 'login',
+        element: <Login />,
       },
     ],
   },
