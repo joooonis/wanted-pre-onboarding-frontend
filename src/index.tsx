@@ -6,6 +6,7 @@ import ErrorPage from './error-page';
 import './tailwind.css';
 import Signup from './routes/signup';
 import Signin from './routes/signin';
+import Todo from './routes/todo';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: 'signin',
         element: <Signin />,
+      },
+      {
+        path: 'todo',
+        element: <Todo />,
       },
     ],
   },
