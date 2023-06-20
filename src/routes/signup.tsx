@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 
 export default function Signup(): JSX.Element {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const isEmailValid = email.includes('@');
   const isPasswordValid = password.length >= 8;
@@ -15,12 +16,15 @@ export default function Signup(): JSX.Element {
     setPassword(e.target.value);
   };
 
-  const handleSignup = () => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+
     console.log(email, password);
   };
 
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
       <h1 className='font-bold text-xl mb-12'>Sign up</h1>
       <div>
         <label className='font-light text-sm' htmlFor='email'>
@@ -34,6 +38,11 @@ export default function Signup(): JSX.Element {
           data-testid='email-input'
           onChange={handleEmail}
         />
+        {isSubmitted && !isEmailValid && (
+          <p className='text-red-500 my-2 text-xs'>
+            email should include '@' character
+          </p>
+        )}
       </div>
       <div>
         <input
@@ -44,16 +53,21 @@ export default function Signup(): JSX.Element {
           data-testid='password-input'
           onChange={handlePassword}
         />
+        {isSubmitted && !isPasswordValid && (
+          <p className='text-red-500 my-2 text-xs'>
+            password should be longer than 8 characters
+          </p>
+        )}
       </div>
       <div className='mt-12'>
         <button
           className='bg-system-black disabled:opacity-50 border-none font-light text-white w-full shadow-md py-3 rounded-full'
+          type='submit'
           data-testid='signup-button'
-          disabled={!isEmailValid || !isPasswordValid}
-          onClick={handleSignup}>
+          disabled={!isEmailValid || !isPasswordValid}>
           Sign up
         </button>
       </div>
-    </div>
+    </form>
   );
 }
