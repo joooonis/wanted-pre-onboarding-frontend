@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from '../components/Button';
 
 interface Todo {
   id: number;
@@ -8,7 +9,7 @@ interface Todo {
   userId: number;
 }
 
-export default function Todo(): JSX.Element {
+export default function TodoList(): JSX.Element {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState('');
   const [error, setError] = useState('');
@@ -247,34 +248,31 @@ export default function Todo(): JSX.Element {
             </label>
             <div className='space-x-2'>
               {editingTodoId === todo.id ? (
-                <button
-                  onClick={() => handleSaveTodo(todo.id)}
-                  className='bg-system-black disabled:opacity-50 border-none font-light text-white text-sm shadow-md px-2 py-2 rounded-full'
-                  data-testid='modify-button'>
+                <Button
+                  size='sm'
+                  testId='modify-button'
+                  onClick={() => handleSaveTodo(todo.id)}>
                   완료
-                </button>
+                </Button>
               ) : (
-                <button
-                  onClick={() => handleEditTodo(todo.id, todo.todo)}
-                  className='bg-system-black disabled:opacity-50 border-none font-light text-white text-sm shadow-md px-2 py-2 rounded-full'
-                  data-testid='modify-button'>
+                <Button
+                  size='sm'
+                  testId='modify-button'
+                  onClick={() => handleEditTodo(todo.id, todo.todo)}>
                   수정
-                </button>
+                </Button>
               )}
               {editingTodoId === todo.id ? (
-                <button
-                  onClick={() => setEditingTodoId(null)}
-                  className='bg-system-black disabled:opacity-50 border-none font-light text-white text-sm shadow-md px-2 py-2 rounded-full'
-                  data-testid='delete-button'>
+                <Button size='sm' onClick={() => setEditingTodoId(null)}>
                   취소
-                </button>
+                </Button>
               ) : (
-                <button
-                  onClick={() => handleDeleteTodo(todo.id)}
-                  className='bg-system-black disabled:opacity-50 border-none font-light text-white text-sm shadow-md px-2 py-2 rounded-full'
-                  data-testid='delete-button'>
+                <Button
+                  size='sm'
+                  testId='delete-button'
+                  onClick={() => handleDeleteTodo(todo.id)}>
                   삭제
-                </button>
+                </Button>
               )}
             </div>
           </li>
@@ -291,12 +289,9 @@ export default function Todo(): JSX.Element {
           className='w-full rounded-full px-4 py-3 placeholder:font-light appearance-none focus:outline-none'
           type='text'
         />
-        <button
-          data-testid='new-todo-add-button'
-          className='bg-system-black disabled:opacity-50 border-none font-light text-white w-full shadow-md py-3 rounded-full'
-          type='submit'>
+        <Button size='lg' testId='new-todo-add-button' type='submit'>
           추가
-        </button>
+        </Button>
       </form>
     </div>
   );

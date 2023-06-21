@@ -1,5 +1,6 @@
 import { useState, FormEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from '../components/Button';
 
 export default function Signin(): JSX.Element {
   const [email, setEmail] = useState<string>('');
@@ -113,13 +114,13 @@ export default function Signin(): JSX.Element {
         )}
       </div>
       <div className='mt-12'>
-        <button
-          className='bg-system-black disabled:opacity-50 border-none font-light text-white w-full shadow-md py-3 rounded-full'
-          type='submit'
-          data-testid='signin-button'
-          disabled={!isEmailValid || !isPasswordValid}>
+        <Button
+          size='lg'
+          testId='signin-button'
+          disabled={!isEmailValid || !isPasswordValid}
+          type='submit'>
           Log in
-        </button>
+        </Button>
         {error && (
           <p className='text-red-500 my-2 text-xs text-center'>{error}</p>
         )}
