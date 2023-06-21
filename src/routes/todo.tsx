@@ -226,8 +226,8 @@ export default function Todo(): JSX.Element {
         {todos.map((todo) => (
           <li
             key={todo.id}
-            className='p-2 flex w-full justify-between items-center bg-primary rounded-3xl'>
-            <label>
+            className=' p-2 flex w-full justify-between items-center bg-primary rounded-3xl'>
+            <label className='flex w-[calc(100%-102px)]'>
               <input
                 type='checkbox'
                 defaultChecked={todo.isCompleted}
@@ -236,6 +236,7 @@ export default function Todo(): JSX.Element {
               />
               {editingTodoId === todo.id ? (
                 <input
+                  className='grow bg-gray-200 rounded-md px-2 py-1'
                   type='text'
                   value={editedTodo}
                   onChange={(e) => setEditedTodo(e.target.value)}
