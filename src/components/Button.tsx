@@ -12,9 +12,11 @@ export default function Button({
   onClick,
   children,
   className,
+  ...props
 }: ButtonProps) {
   return (
     <button
+      {...props}
       data-testid={testId}
       onClick={onClick}
       className={`${
