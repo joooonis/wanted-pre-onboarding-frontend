@@ -3,6 +3,13 @@ import Button from '../components/Button';
 
 export default function Root(): JSX.Element {
   const location = useLocation();
+  const token = localStorage.getItem('token');
+  const isLoggedIn = token ? true : false;
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.reload();
+  };
+
   return (
     <div className='bg-gray-100'>
       <div className='max-w-[768px] m-auto'>
@@ -41,6 +48,11 @@ export default function Root(): JSX.Element {
                 <Link className='w-full' to={'/todo'}>
                   <Button size='lg'>To do</Button>
                 </Link>
+                {isLoggedIn && (
+                  <Button size='lg' onClick={handleLogout}>
+                    Log out
+                  </Button>
+                )}
               </div>
             )}
             <Outlet />
