@@ -194,6 +194,31 @@ export default function Todo(): JSX.Element {
     }
   };
 
+  const handleDeleteTodo = async (todoId: number) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('Unauthorized');
+        return;
+      }
+
+      const updatedTodos = todos.filter((todo) => todo.id !== todoId);
+      setTodos(updatedTodos);
+
+      await fetch(
+        `https://www.pre-onboarding-selection-task.shop/todos/${todoId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      setError('An error occurred. Please try again.');
+    }
+  };
+
   return (
     <div>
       <h1 className='font-light text-center text-xl mb-12'>Todo List</h1>
@@ -244,6 +269,7 @@ export default function Todo(): JSX.Element {
                 </button>
               ) : (
                 <button
+                  onClick={() => handleDeleteTodo(todo.id)}
                   className='bg-system-black disabled:opacity-50 border-none font-light text-white text-sm shadow-md px-2 py-2 rounded-full'
                   data-testid='delete-button'>
                   삭제
