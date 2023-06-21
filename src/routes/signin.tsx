@@ -2,6 +2,7 @@ import { useState, FormEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import { AuthApi } from '../apis/auth/authApi';
+import Error from '../components/Error';
 
 export default function Signin(): JSX.Element {
   const [email, setEmail] = useState<string>('');
@@ -108,9 +109,7 @@ export default function Signin(): JSX.Element {
           type='submit'>
           Log in
         </Button>
-        {error && (
-          <p className='text-red-500 my-2 text-xs text-center'>{error}</p>
-        )}
+        {error && <Error error={error} />}
       </div>
     </form>
   );

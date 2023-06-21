@@ -1,6 +1,7 @@
 import { useState, FormEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
+import Error from '../components/Error';
 
 export default function Signup(): JSX.Element {
   const [email, setEmail] = useState<string>('');
@@ -117,9 +118,7 @@ export default function Signup(): JSX.Element {
           type='submit'>
           Sign up
         </Button>
-        {error && (
-          <p className='text-red-500 my-2 text-xs text-center'>{error}</p>
-        )}
+        {error && <Error error={error} />}
       </div>
     </form>
   );

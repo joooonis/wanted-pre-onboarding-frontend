@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
+import Error from '../components/Error';
 
 interface Todo {
   id: number;
@@ -292,6 +293,7 @@ export default function TodoList(): JSX.Element {
         <Button size='lg' testId='new-todo-add-button' type='submit'>
           추가
         </Button>
+        {error && <Error error={error} />}
       </form>
     </div>
   );
