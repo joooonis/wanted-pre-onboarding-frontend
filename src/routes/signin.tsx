@@ -1,6 +1,7 @@
 import { useState, FormEvent, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
+import { AuthApi } from '../apis/auth/authApi';
 
 export default function Signin(): JSX.Element {
   const [email, setEmail] = useState<string>('');
@@ -21,6 +22,8 @@ export default function Signin(): JSX.Element {
     setPassword(e.target.value);
   };
 
+  const authApi = new AuthApi();
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitted(true);
@@ -31,28 +34,12 @@ export default function Signin(): JSX.Element {
     }
 
     try {
-      const response = await fetch(
-        'https://www.pre-onboarding-selection-task.shop/auth/signin',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-
-      if (response.ok) {
-        // set response token to local storage
-        const data = await response.json();
-        localStorage.setItem('token', data.access_token);
-        navigate('/todo');
-      } else {
-        const data = await response.json();
-        setError(data.message || 'Failed to Log in.');
-      }
-    } catch (error) {
-      setError('An error occurred. Please try again.');
+      const { data } = await authApi.signin({ email, password });
+      localStorage.setItem('token', data.access_token);
+      navigate('/todo');
+    } catch (error: any) {
+      const data = error.response.data as Error;
+      setError(data.message || 'An error occurred. Please try again.');
     }
   };
 

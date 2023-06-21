@@ -1,22 +1,22 @@
 import instance from '../_axios/instance';
-import { Token, User } from './authApi.type';
+import { User } from './authApi.type';
 
 export class AuthApi {
-  async signIn(body: User): Promise<Token> {
-    const { data } = await instance({
+  async signin(body: User) {
+    const response = await instance({
       method: 'POST',
-      url: '/signin',
+      url: '/auth/signin',
       data: body,
     });
-    return data;
+    return response;
   }
 
   async signUp(body: User) {
-    const { data } = await instance({
+    const response = await instance({
       method: 'POST',
-      url: '/signup',
+      url: '/auth/signup',
       data: body,
     });
-    return data;
+    return response;
   }
 }
